@@ -19,6 +19,10 @@ int pH;
 int ORP;
 //TIMER
 long clkTime = 0;
+//LCD 2004
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd(0x27, 20, 4);
 
 void setup() {
   Serial.begin(9600);
@@ -27,6 +31,17 @@ void setup() {
   pinMode(Pin_x, OUTPUT);
   pinMode(Pin_y, OUTPUT);
   sensorSerial.begin(9600); 
+
+  //LCD 2004
+  lcd.init();
+  lcd.init();
+
+  lcd.backlight();
+  lcd.print("**LEDAT WATER NODE**");
+  lcd.setCursor(0,2);
+  lcd.print("pH:");
+  lcd.setCursor(10,2);
+  lcd.print("ORP:");
 }
 
 //FUNCTION AS SENSOR
@@ -45,17 +60,27 @@ void loop() {
     loraSerial.print(" pH" + (String)pH);
     Serial.println("Sent pH parametter!");
     delay(500);
+
+    //LCD 2004
+    //clear LCD
+    lcd.setCursor(3,2);
+    lcd.print("  ");
+    lcd.setCursor(14,2);
+    lcd.print("    ");
+    //Display para
+    lcd.setCursor(3,2);
+    lcd.print((String)pH);
+    lcd.setCursor(14,2);
+    lcd.print((String)ORP);
     }
   //AS SENSOR
   if(counterSensorAS  == 0){
       open_channel (1);
       counterSensorAS = 1;
-      Serial.println("Chanel 1 selected!");
       }
     else{
       open_channel (2);
       counterSensorAS = 0;
-      Serial.println("Chanel 2 selected!");
       }
   if(sensorSerial.available() > 0){
     sensor_bytes_received=sensorSerial.readBytesUntil(13,sensordata,30);
