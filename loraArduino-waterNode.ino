@@ -3,11 +3,11 @@
 #define TX 7
 SoftwareSerial loraSerial(RX, TX); // RX, TX
 //AS Sensor
-#define rxSensor 2
-#define txSensor 3
+#define rxSensor 8
+#define txSensor 9
 SoftwareSerial sensorSerial(rxSensor, txSensor);
-int Pin_x = 4;
-int Pin_y = 5;
+int Pin_x = 10;
+int Pin_y = 11;
 char computerdata[20];
 char sensordata[30];
 byte computer_bytes_received=0;
@@ -24,6 +24,7 @@ long clkTime = 0;
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 //Turbi Sensor
+float volt;
 int Turbi;
 int valTurbi;
 
@@ -47,8 +48,8 @@ void setup() {
   lcd.print("ORP:");
   lcd.setCursor(0,3);
   lcd.print("Turbidity:");
-  lcd.setCursor(12,3);
-  lcd.print("V");
+  lcd.setCursor(16,3);
+  lcd.print("NTU");
 }
 
 //FUNCTION AS SENSOR
@@ -78,21 +79,14 @@ void loop() {
     lcd.setCursor(14,2);
     lcd.print("      ");
     lcd.setCursor(10,3);
-    lcd.print("  ");
+    lcd.print("     ");
     //Display para
     lcd.setCursor(3,2);
     lcd.print((String)pH);
     lcd.setCursor(14,2);
     lcd.print((String)ORP);
-    if (Turbi < 10){
-      lcd.setCursor(11,3);
-      lcd.print((String)Turbi);
-      }
-    else {
-      lcd.setCursor(10,3);
-      lcd.print((String)Turbi);
-      }
-    }
+    lcd.setCursor(10,3);
+    lcd.print((String)Turbi);
   //AS SENSOR
   if(counterSensorAS  == 0){
       open_channel (1);
@@ -117,12 +111,18 @@ void loop() {
       Serial.println(ORP);
       }
   } delay(1000);
-
+}
   //Turbidity Sensor
   valTurbi = analogRead(A0);
-  Turbi = valTurbi*(5/1023);
+  volt = valTurbi * (5.0 / 1024.0);
+  if(volt < 2.5){
+      Turbi = 3000;
+    }else{
+      Turbi = -1120.4*square(volt)+5742.3*volt-4353.8; 
+    }
   Serial.print("Turbidity: ");
   Serial.println(Turbi);
+  delay(1000);
 }
 //FUNCTION AS SENSOR
 void open_channel(int channel){                          
