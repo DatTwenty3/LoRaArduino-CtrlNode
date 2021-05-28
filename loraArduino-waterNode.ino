@@ -15,7 +15,7 @@ byte sensor_bytes_received=0;
 char *cmd;
 int counterSensorAS;
 float dataToFloat;
-int pH;
+float pH;
 int ORP;
 //TIMER
 long clkTime = 0;
@@ -25,7 +25,7 @@ long clkTime = 0;
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 //Turbi Sensor
 float volt;
-int Turbi;
+float Turbi;
 int valTurbi;
 
 void setup() {
@@ -41,15 +41,15 @@ void setup() {
   lcd.init();
 
   lcd.backlight();
-  lcd.print("**LEDAT WATER NODE**");
+  lcd.print("--LEDAT WATER NODE--");
   lcd.setCursor(0,2);
   lcd.print("pH:");
   lcd.setCursor(10,2);
   lcd.print("ORP:");
   lcd.setCursor(0,3);
   lcd.print("Turbidity:");
-  lcd.setCursor(16,3);
-  lcd.print("NTU");
+  lcd.setCursor(15,3);
+  lcd.print("V");
 }
 
 //FUNCTION AS SENSOR
@@ -87,6 +87,7 @@ void loop() {
     lcd.print((String)ORP);
     lcd.setCursor(10,3);
     lcd.print((String)Turbi);
+  }
   //AS SENSOR
   if(counterSensorAS  == 0){
       open_channel (1);
@@ -111,15 +112,15 @@ void loop() {
       Serial.println(ORP);
       }
   } delay(1000);
-}
+  
   //Turbidity Sensor
-  valTurbi = analogRead(A0);
-  volt = valTurbi * (5.0 / 1024.0);
-  if(volt < 2.5){
+  valTurbi = analogRead(A1);
+  Turbi = valTurbi * (5.0 / 1024.0);
+  /*if(volt < 2.5){
       Turbi = 3000;
     }else{
       Turbi = -1120.4*square(volt)+5742.3*volt-4353.8; 
-    }
+    }*/
   Serial.print("Turbidity: ");
   Serial.println(Turbi);
   delay(1000);
