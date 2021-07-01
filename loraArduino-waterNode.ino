@@ -47,9 +47,9 @@ void setup() {
   lcd.setCursor(10,2);
   lcd.print("ORP:");
   lcd.setCursor(0,3);
-  lcd.print("Turbidity:");
+  lcd.print("Turbi:");
   lcd.setCursor(15,3);
-  lcd.print("V");
+  lcd.print("NTU");
 }
 
 //FUNCTION AS SENSOR
@@ -78,14 +78,14 @@ void loop() {
     lcd.print("       ");
     lcd.setCursor(14,2);
     lcd.print("      ");
-    lcd.setCursor(10,3);
+    lcd.setCursor(6,3);
     lcd.print("     ");
     //Display para
     lcd.setCursor(3,2);
     lcd.print((String)pH);
     lcd.setCursor(14,2);
     lcd.print((String)ORP);
-    lcd.setCursor(10,3);
+    lcd.setCursor(6,3);
     lcd.print((String)Turbi);
   }
   //AS SENSOR
@@ -116,11 +116,11 @@ void loop() {
   //Turbidity Sensor
   valTurbi = analogRead(A1);
   Turbi = valTurbi * (5.0 / 1024.0);
-  /*if(volt < 2.5){
-      Turbi = 3000;
+  if(Turbi < 2.5){
+      Turbi = 3000.0;
     }else{
-      Turbi = -1120.4*square(volt)+5742.3*volt-4353.8; 
-    }*/
+      Turbi = -1120.4*square(volt)+5742.3*volt-4352.9;
+    }
   Serial.print("Turbidity: ");
   Serial.println(Turbi);
   delay(1000);
