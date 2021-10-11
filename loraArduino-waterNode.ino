@@ -107,9 +107,11 @@ void loop() {
       Serial.println(pH);
       }
     else {
-      ORP = dataToFloat;
-      Serial.print("ORP: ");
-      Serial.println(ORP);
+      if (dataToFloat >= 0 && dataToFloat <= 1020){
+        ORP = dataToFloat;
+        Serial.print("ORP: ");
+        Serial.println(ORP);
+      }
       }
   } delay(1000);
   
