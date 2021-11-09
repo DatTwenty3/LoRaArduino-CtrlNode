@@ -45,7 +45,7 @@ void setup() {
   lcd.backlight();
   lcd.print("--LEDAT WATER NODE--");
   lcd.setCursor(0,1);
-  lcd.print("Package:");
+  lcd.print("Packet:");
   lcd.setCursor(0,2);
   lcd.print("pH:");
   lcd.setCursor(10,2);
@@ -79,7 +79,7 @@ void loop() {
 
     //Count package was sent
     countPack += 1;
-    lcd.setCursor(8,1);
+    lcd.setCursor(7,1);
     lcd.print((String)countPack);
     
 
