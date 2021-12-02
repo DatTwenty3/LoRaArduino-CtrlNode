@@ -25,8 +25,8 @@ long clkTime = 0;
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 //Turbi Sensor
 float volt;
-float Turbi;
-int valTurbi;
+double Turbi;
+float valTurbi;
 //Counter Package
 int countPack = 0;
 
@@ -90,7 +90,7 @@ void loop() {
     lcd.setCursor(14,2);
     lcd.print("      ");
     lcd.setCursor(6,3);
-    lcd.print("     ");
+    lcd.print("       ");
     //Display para
     lcd.setCursor(3,2);
     lcd.print((String)pH);
@@ -127,12 +127,19 @@ void loop() {
   } delay(1000);
   
   //Turbidity Sensor
-  valTurbi = analogRead(A1);
-  Turbi = valTurbi * (5.0 / 1024.0);
-  if(Turbi < 2.5){
+  for (int i = 0; i < 800; i++){
+    valTurbi = analogRead(A1);
+    volt += (valTurbi / 1023.0)*5;
+  }
+  volt = volt/800;
+  if(volt < 2.5){
       Turbi = 3000.0;
-    }else{
+    }
+  else if (volt >=2.5 && volt < 4.2){
       Turbi = -1120.4*square(volt)+5742.3*volt-4352.9;
+    }
+   else {
+      Turbi = 0.0;
     }
   Serial.print("Turbidity: ");
   Serial.println(Turbi);
@@ -161,4 +168,4 @@ void open_channel(int channel){
          digitalWrite(Pin_y, HIGH);
        break;
       }
-}    
+}
